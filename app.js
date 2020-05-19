@@ -1,25 +1,34 @@
-const square = document.querySelectorAll('.square');
-const mole = document.querySelectorAll('.mole');
-const timeLeft = document.querySelector('#time-left');
-let score = document.querySelector('#score');
+// const square = document.querySelectorAll('.square');
+// const mole = document.querySelectorAll('.mole');
+// const timeLeft = document.querySelector('#time-left');
+// let score = document.querySelector('#score');
+
+const gridModule = (function() {
+	const square = document.querySelectorAll('.square');
+	const mole = document.querySelectorAll('.mole');
+	const timeLeft = document.querySelector('#time-left');
+	let score = document.querySelector('#score');
+	return { square, mole, timeLeft, score };
+})();
+console.log(gridModule);
 
 let result = 0;
-let currentTime = timeLeft.textContent;
+let currentTime = gridModule.timeLeft.textContent;
 
 //random select square in the grid
 const randomSquare = () => {
 	//make sure there is no element with the class mole
-	square.forEach((className) => {
+	gridModule.square.forEach((className) => {
 		className.classList.remove('mole');
 	});
 	// choose a random square in our grid
-	let randomPosition = square[Math.floor(Math.random() * 9)];
+	let randomPosition = gridModule.square[Math.floor(Math.random() * 9)];
 	randomPosition.classList.add('mole');
 	// assign the id of the randomPosition to hitPosition
 	hitPosition = randomPosition.id;
 };
 
-square.forEach((id) => {
+gridModule.square.forEach((id) => {
 	id.addEventListener('mouseup', () => {
 		if (id.id === hitPosition) {
 			result = result + 1;
@@ -31,13 +40,13 @@ square.forEach((id) => {
 //move the mole in the grid every second
 const moveMole = () => {
 	let timerId = null;
-	timerId = setInterval(randomSquare, 500);
+	timerId = setInterval(randomSquare, 1000);
 };
 
 //countdown function
 const countDown = () => {
 	currentTime--;
-	timeLeft.textContent = currentTime;
+	gridModule.timeLeft.textContent = currentTime;
 
 	if (currentTime === 0) {
 		clearInterval(timerId);
@@ -46,4 +55,5 @@ const countDown = () => {
 };
 
 let timerId = setInterval(countDown, 1000);
+
 moveMole();
